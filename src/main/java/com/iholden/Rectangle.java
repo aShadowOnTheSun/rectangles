@@ -37,10 +37,10 @@ public interface Rectangle
         }
 
         return otherRectangle.getCornerPoints().stream().allMatch(otherPoint ->
-                otherPoint.getXCoordinate() > this.getLowerLeft().getXCoordinate() &&
-                otherPoint.getXCoordinate() < this.getLowerRight().getXCoordinate() &&
-                otherPoint.getYCoordinate() > this.getLowerLeft().getYCoordinate() &&
-                otherPoint.getYCoordinate() < this.getTopRight().getYCoordinate());
+                otherPoint.getXCoordinate() >= this.getLowerLeft().getXCoordinate() &&
+                otherPoint.getXCoordinate() <= this.getLowerRight().getXCoordinate() &&
+                otherPoint.getYCoordinate() >= this.getLowerLeft().getYCoordinate() &&
+                otherPoint.getYCoordinate() <= this.getTopRight().getYCoordinate());
     }
 
     default Set<Point> findIntersectionPointsWith(Rectangle otherRectangle)

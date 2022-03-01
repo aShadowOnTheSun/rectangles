@@ -60,6 +60,33 @@ public class RectangleImplTest
     }
 
     @Test
+    public void contains_rectangleAContainsRectangleBWithOneSharedSide_returnsTrue()
+    {
+        rectangleA = new RectangleImpl(7, 5, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(2, 1, new PointImpl(7, 3));
+
+        assertTrue(rectangleA.contains(rectangleB));
+    }
+
+    @Test
+    public void contains_rectangleAContainsRectangleBWithTwoSharedSides_returnsTrue()
+    {
+        rectangleA = new RectangleImpl(7, 5, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(3, 2, new PointImpl(6, 5));
+
+        assertTrue(rectangleA.contains(rectangleB));
+    }
+
+    @Test
+    public void contains_rectangleAContainsRectangleBWithThreeSharedSides_returnsTrue()
+    {
+        rectangleA = new RectangleImpl(7, 5, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(7, 2, new PointImpl(2, 5));
+
+        assertTrue(rectangleA.contains(rectangleB));
+    }
+
+    @Test
     public void findIntersectionPointsWith_4VerticalIntersectionPoints_returnsCorrectPoints()
     {
         rectangleA = new RectangleImpl(3, 5, new PointImpl(3,2));
@@ -125,7 +152,6 @@ public class RectangleImplTest
 
         Set<Point> actualIntersectionPoints = rectangleA.findIntersectionPointsWith(rectangleB);
 
-        assertEquals(expectedIntersectionPoints.size(), actualIntersectionPoints.size());
-        expectedIntersectionPoints.forEach(expectedIntersectionPoint -> assertTrue(actualIntersectionPoints.contains(expectedIntersectionPoint)));
+        assertTrue(actualIntersectionPoints.isEmpty());
     }
 }
