@@ -1,13 +1,13 @@
-package com.iholden;
-
-import static java.util.stream.Collectors.toList;
+package com.iholden.entities.impl;
 
 import com.iholden.constants.Orientation;
+import com.iholden.entities.Line;
+import com.iholden.entities.Point;
+import com.iholden.entities.Rectangle;
 import com.iholden.support.Range;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class RectangleImpl implements Rectangle
 {

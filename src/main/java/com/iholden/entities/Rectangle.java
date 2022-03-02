@@ -1,9 +1,10 @@
-package com.iholden;
+package com.iholden.entities;
 
 import static java.util.stream.Collectors.toList;
 
 import com.iholden.constants.Adjacency;
 import com.iholden.constants.Orientation;
+import com.iholden.entities.impl.PointImpl;
 import com.iholden.support.Range;
 
 import java.util.HashSet;
@@ -56,7 +57,7 @@ public interface Rectangle
 
     default Adjacency determineAdjacencyWith(Rectangle otherRectangle)
     {
-        if (this.contains(otherRectangle) || !this.findIntersectionPointsWith(otherRectangle).isEmpty())
+        if (this.equals(otherRectangle) || this.contains(otherRectangle) || !this.findIntersectionPointsWith(otherRectangle).isEmpty())
         {
             return Adjacency.NONE;
         }

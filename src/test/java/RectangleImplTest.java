@@ -1,9 +1,9 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.iholden.Point;
-import com.iholden.PointImpl;
-import com.iholden.Rectangle;
-import com.iholden.RectangleImpl;
+import com.iholden.entities.Point;
+import com.iholden.entities.impl.PointImpl;
+import com.iholden.entities.Rectangle;
+import com.iholden.entities.impl.RectangleImpl;
 import com.iholden.constants.Adjacency;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

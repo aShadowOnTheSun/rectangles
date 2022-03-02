@@ -1,4 +1,7 @@
-package com.iholden;
+package com.iholden.entities.impl;
+
+import com.iholden.entities.Line;
+import com.iholden.entities.Point;
 
 import java.util.List;
 import java.util.Objects;

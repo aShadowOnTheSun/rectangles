@@ -1,6 +1,6 @@
 package com.iholden.exceptions;
 
-import com.iholden.Line;
+import com.iholden.entities.Line;
 
 public class DiagonalLineException extends RuntimeException
 {

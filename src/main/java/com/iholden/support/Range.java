@@ -1,6 +1,6 @@
 package com.iholden.support;
 
-import com.iholden.Line;
+import com.iholden.entities.Line;
 
 import java.util.HashSet;
 import java.util.Optional;

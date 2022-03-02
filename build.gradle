@@ -1,4 +1,5 @@
 plugins {
+    id 'application'
     id 'java'
 }
 
@@ -6,6 +7,14 @@ group 'com.iholden'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = JavaVersion.VERSION_15
+
+application {
+    mainClassName = 'com.iholden.RectangleApplication'
+}
+
+run {
+    standardInput = System.in
+}
 
 wrapper {
     gradleVersion = '7.4'

@@ -1,4 +1,4 @@
-package com.iholden;
+package com.iholden.entities;
 
 import static java.util.stream.Collectors.toSet;
 
