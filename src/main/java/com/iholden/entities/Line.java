@@ -11,14 +11,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-// TODO - add javadoc
-// REQUIRES equals() and hashCode() implementations in subclasses
+/**
+ * <p>Interface representing a Line on a 2-dimensional plane, consisting of 2 points.</p>
+ * <p>Provides default implementations of comparison between lines.</p>
+ * <p><b>All implementations are REQUIRED to provide valid {@link #equals(Object)} and {@link #hashCode()} implementations.</b></p>
+ * @see com.iholden.entities.impl.LineImpl
+ */
 public interface Line
 {
-    Point getPointA();
-    Point getPointB();
-    List<Point> getPoints();
-
+    /**
+     * Calculates the length of the line, e.g. the distance between its two points
+     * @return the length of the line
+     */
     default Long getLength()
     {
         return switch (getOrientation())
@@ -28,6 +32,10 @@ public interface Line
         };
     }
 
+    /**
+     * Gets all the distinct X coordinates that this line's points contain
+     * @return an <b>immutable</b> Set of all the distinct X coordinates that this line's points contain
+     */
     default Set<Long> getDistinctXCoordinates()
     {
         return getPoints().stream()
@@ -35,6 +43,10 @@ public interface Line
                 .collect(toSet());
     }
 
+    /**
+     * Gets all the distinct Y coordinates that this line's points contain
+     * @return an <b>immutable</b> Set of all the distinct Y coordinates that this line's points contain
+     */
     default Set<Long> getDistinctYCoordinates()
     {
         return getPoints().stream()
@@ -42,6 +54,19 @@ public interface Line
                 .collect(toSet());
     }
 
+    /**
+     * <p>Determines whether this line is adjacent with {@code otherLine}</p>
+     * <p>This method considers two lines to be adjacent when they are of
+     *    the same orientation, and have one or more overlapping coordinates
+     *    on the same axis.</p>
+     * <p>Callers are expected to have checked the parent quadrilateral for
+     *    adjacency types that are dependent upon broader context
+     *    (such as {@link Adjacency#SINGLE_POINT}) prior to calling this method.</p>
+     * <p>See README for additional details on Adjacency classifications.</p>
+     * @param otherLine other line to compare to
+     * @return the Adjacency classification of the Lines
+     * @see Adjacency
+     */
     default Adjacency determineAdjacencyWith(Line otherLine)
     {
         // Identical lines always indicate PROPER adjacency
@@ -71,34 +96,7 @@ public interface Line
             return Adjacency.NONE;
         }
 
-        Range thisYCoordinateRange = Range.of(this);
-        Optional<Range> overlappingYCoordinateRangeOptional = thisYCoordinateRange.getRangeOfOverlappingValues(Range.of(otherLine));
-
-        // Empty Optional here indicates that there no overlapping Y coordinates
-        if (overlappingYCoordinateRangeOptional.isEmpty())
-        {
-            return Adjacency.NONE;
-        }
-
-        Range overlappingYCoordinateRange = overlappingYCoordinateRangeOptional.get();
-
-        // Since we've already checked for SINGLE_POINT matches, this is indicative of lines that touch, but are not adjacent
-        if (overlappingYCoordinateRange.getDistance() == 0)
-        {
-            return Adjacency.NONE;
-        }
-
-        /*
-         * Since we KNOW at this point that there is adjacency, and we've already ruled out PROPER and SINGLE_POINT,
-         * we can reasonably assume that if the other line is longer than this one, or does not contain the entire
-         * range of overlapping coordinates, that it is PARTIAL
-         */
-        if (otherLine.getLength() < this.getLength() && thisYCoordinateRange.containsAllExclusive(overlappingYCoordinateRange))
-        {
-            return Adjacency.SUB_LINE;
-        }
-
-        return Adjacency.PARTIAL;
+        return internalDetermineAdjacency(this, otherLine);
     }
 
     default Adjacency determineHorizontalAdjacencyWith(Line otherLine)
@@ -109,34 +107,7 @@ public interface Line
             return Adjacency.NONE;
         }
 
-        Range thisXCoordinateRange = Range.of(this);
-        Optional<Range> overlappingXCoordinateRangeOptional = thisXCoordinateRange.getRangeOfOverlappingValues(Range.of(otherLine));
-
-        // Empty Optional here indicates that there no overlapping Y coordinates
-        if (overlappingXCoordinateRangeOptional.isEmpty())
-        {
-            return Adjacency.NONE;
-        }
-
-        Range overlappingXCoordinateRange = overlappingXCoordinateRangeOptional.get();
-
-        // Since we've already checked for SINGLE_POINT matches, this is indicative of lines that touch, but are not adjacent
-        if (overlappingXCoordinateRange.getDistance() == 0)
-        {
-            return Adjacency.NONE;
-        }
-
-        /*
-         * Since we KNOW at this point that there is adjacency, and we've already ruled out PROPER and SINGLE_POINT,
-         * we can reasonably assume that if the other line is longer than this one, or does not contain the entire
-         * range of overlapping coordinates, that it is PARTIAL
-         */
-        if (otherLine.getLength() < this.getLength() && thisXCoordinateRange.containsAllExclusive(overlappingXCoordinateRange))
-        {
-            return Adjacency.SUB_LINE;
-        }
-
-        return Adjacency.PARTIAL;
+        return internalDetermineAdjacency(this, otherLine);
     }
 
     default Orientation getOrientation()
@@ -152,4 +123,40 @@ public interface Line
 
         throw new DiagonalLineException(this);
     }
+
+    private static Adjacency internalDetermineAdjacency(Line lineA, Line lineB)
+    {
+        Range thisCoordinateRange = Range.of(lineA);
+        Optional<Range> overlappingCoordinateRangeOptional = thisCoordinateRange.getRangeOfOverlappingValues(Range.of(lineB));
+
+        // Empty Optional here indicates that there no overlapping Y coordinates
+        if (overlappingCoordinateRangeOptional.isEmpty())
+        {
+            return Adjacency.NONE;
+        }
+
+        Range overlappingCoordinateRange = overlappingCoordinateRangeOptional.get();
+
+        // Since we've already checked for SINGLE_POINT matches, this is indicative of lines that touch, but are not adjacent
+        if (overlappingCoordinateRange.getDistance() == 0)
+        {
+            return Adjacency.NONE;
+        }
+
+        /*
+         * Since we KNOW at this point that there is adjacency, and we've already ruled out PROPER and SINGLE_POINT,
+         * we can reasonably assume that if the other line is longer than this one, or does not contain the entire
+         * range of overlapping coordinates, that it is PARTIAL
+         */
+        if (lineB.getLength() < lineA.getLength() && thisCoordinateRange.containsAllExclusive(overlappingCoordinateRange))
+        {
+            return Adjacency.SUB_LINE;
+        }
+
+        return Adjacency.PARTIAL;
+    }
+
+    Point getPointA();
+    Point getPointB();
+    List<Point> getPoints();
 }

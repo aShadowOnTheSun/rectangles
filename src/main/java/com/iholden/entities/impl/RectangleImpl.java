@@ -106,11 +106,13 @@ public class RectangleImpl implements Rectangle
         return rangeY;
     }
 
+    @Override
     public List<Line> getHorizontalLines()
     {
         return getLinesHavingOrientationOf(Orientation.HORIZONTAL);
     }
 
+    @Override
     public List<Line> getVerticalLines()
     {
         return getLinesHavingOrientationOf(Orientation.VERTICAL);

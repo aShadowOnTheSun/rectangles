@@ -47,9 +47,7 @@ public class RectangleApplication
             rectanglesByLabel.put(label, new RectangleImpl(length, width, new PointImpl(lowerLeftX, lowerLeftY)));
         }
 
-        out.println(ConsoleTextUtils.getRectangleComparisonResults(
-                rectanglesByLabel.get(ConsoleTextUtils.RECTANGLE_LABELS.get(0)),
-                rectanglesByLabel.get(ConsoleTextUtils.RECTANGLE_LABELS.get(1))));
+        out.println(ConsoleTextUtils.getRectangleComparisonResults(rectanglesByLabel));
 
         return getShouldAppRunAgain();
     }

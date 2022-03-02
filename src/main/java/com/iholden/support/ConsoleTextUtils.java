@@ -4,8 +4,12 @@ import com.iholden.entities.Point;
 import com.iholden.entities.Rectangle;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class holding constants and other static support methods for the application's console IO
+ */
 public class ConsoleTextUtils
 {
     public static final List<String> RECTANGLE_LABELS = List.of("A", "B");
@@ -13,6 +17,8 @@ public class ConsoleTextUtils
     public static final List<String> YES_NO_INPUT_ACCEPTED_VALUES = List.of("Y", "N");
 
     public static final String INITIAL_MESSAGE = "Use this application to calculate data about the relationships between two rectangles.";
+
+    public static final String RECTANGLE_INPUT_LABEL_PROMPT = "Enter a name for this Rectangle: ";
 
     public static final String RECTANGLE_INPUT_LENGTH_PROMPT_TEMPLATE = "Enter Rectangle %s LENGTH: ";
 
@@ -44,7 +50,15 @@ public class ConsoleTextUtils
             ===================================================================
             """;
 
-    public static String getRectangleComparisonResults(Rectangle rectangleA, Rectangle rectangleB)
+    public static String getRectangleComparisonResults(Map<String, Rectangle> rectanglesByLabel)
+    {
+        Rectangle rectangleA = rectanglesByLabel.get(RECTANGLE_LABELS.get(0));
+        Rectangle rectangleB = rectanglesByLabel.get(RECTANGLE_LABELS.get(1));
+
+        return getRectangleComparisonResults(rectangleA, rectangleB);
+    }
+
+    private static String getRectangleComparisonResults(Rectangle rectangleA, Rectangle rectangleB)
     {
         return RECTANGLE_COMPARISON_RESULTS_TEMPLATE.formatted(
                 "A", rectangleA.getArea(),
