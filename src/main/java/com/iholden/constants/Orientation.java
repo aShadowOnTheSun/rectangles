@@ -1,4 +1,4 @@
-package com.iholden;
+package com.iholden.constants;
 
 public enum Orientation
 {

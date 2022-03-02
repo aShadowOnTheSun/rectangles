@@ -1,8 +1,13 @@
 package com.iholden;
 
+import static java.util.stream.Collectors.toList;
+
+import com.iholden.constants.Orientation;
 import com.iholden.support.Range;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class RectangleImpl implements Rectangle
 {
@@ -89,13 +94,49 @@ public class RectangleImpl implements Rectangle
         return lines;
     }
 
+    @Override
     public Range getRangeX()
     {
         return rangeX;
     }
 
+    @Override
     public Range getRangeY()
     {
         return rangeY;
+    }
+
+    public List<Line> getHorizontalLines()
+    {
+        return getLinesHavingOrientationOf(Orientation.HORIZONTAL);
+    }
+
+    public List<Line> getVerticalLines()
+    {
+        return getLinesHavingOrientationOf(Orientation.VERTICAL);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        RectangleImpl rectangle = (RectangleImpl) o;
+
+        return length == rectangle.length && width == rectangle.width && lowerLeft.equals(rectangle.lowerLeft);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(length, width, lowerLeft);
     }
 }

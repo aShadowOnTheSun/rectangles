@@ -1,6 +1,7 @@
 package com.iholden;
 
 import java.util.List;
+import java.util.Objects;
 
 public class LineImpl implements Line
 {
@@ -38,5 +39,29 @@ public class LineImpl implements Line
                 "pointA=" + pointA +
                 ", pointB=" + pointB +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        LineImpl line = (LineImpl) o;
+
+        return pointA.equals(line.pointA) && pointB.equals(line.pointB);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(pointA, pointB);
     }
 }

@@ -4,6 +4,7 @@ import com.iholden.Point;
 import com.iholden.PointImpl;
 import com.iholden.Rectangle;
 import com.iholden.RectangleImpl;
+import com.iholden.constants.Adjacency;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -119,7 +120,7 @@ public class RectangleImplTest
     }
 
     @Test
-    public void findIntersectionPointsWith_IntersectionOnMultipleAxes_returnsCorrectPoints()
+    public void findIntersectionPointsWith_intersectionOnMultipleAxes_returnsCorrectPoints()
     {
         rectangleA = new RectangleImpl(6, 5, new PointImpl(1, 1));
         rectangleB = new RectangleImpl(3, 2, new PointImpl(6, 5));
@@ -145,6 +146,17 @@ public class RectangleImplTest
     }
 
     @Test
+    public void findIntersectionPointsWith_rectanglesAreAdjacent_returnsNoPoints()
+    {
+        rectangleA = new RectangleImpl(5, 4, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(7, 4, new PointImpl(7, 2));
+
+        Set<Point> actualIntersectionPoints = rectangleA.findIntersectionPointsWith(rectangleB);
+
+        assertTrue(actualIntersectionPoints.isEmpty());
+    }
+
+    @Test
     public void findIntersectionPointsWith_noIntersectionPoints_returnsNoPoints()
     {
         rectangleA = new RectangleImpl(6, 5, new PointImpl(1, 1));
@@ -153,5 +165,115 @@ public class RectangleImplTest
         Set<Point> actualIntersectionPoints = rectangleA.findIntersectionPointsWith(rectangleB);
 
         assertTrue(actualIntersectionPoints.isEmpty());
+    }
+
+    @Test
+    public void determineAdjacencyWith_properlyAdjacentVertical_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(5, 4, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(7, 4, new PointImpl(7, 2));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.PROPER, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_properlyAdjacentHorizontal_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(5, 4, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(5, 1, new PointImpl(2, 1));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.PROPER, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_subLineAdjacentHorizontal_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(6, 6, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(2, 1, new PointImpl(4, 8));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.SUB_LINE, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_subLineAdjacentVertical_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(6, 6, new PointImpl(2, 2));
+        rectangleB = new RectangleImpl(6, 2, new PointImpl(8, 4));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.SUB_LINE, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_partiallyAdjacentVertical_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(5, 8, new PointImpl(3, 0));
+        rectangleB = new RectangleImpl(5, 5, new PointImpl(8, 5));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.PARTIAL, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_partiallyAdjacentHorizontal_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(5, 8, new PointImpl(3, 0));
+        rectangleB = new RectangleImpl(5, 2, new PointImpl(0, 8));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.PARTIAL, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_singlePointCornerAdjacentBottomRight_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(4, 3, new PointImpl(3, 3));
+        rectangleB = new RectangleImpl(3, 1, new PointImpl(7, 2));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.SINGLE_POINT, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_singlePointCornerAdjacentTopRight_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(4, 3, new PointImpl(3, 3));
+        rectangleB = new RectangleImpl(2, 4, new PointImpl(7, 6));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.SINGLE_POINT, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_singlePointCornerAdjacentTopLeft_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(4, 3, new PointImpl(3, 3));
+        rectangleB = new RectangleImpl(2, 2, new PointImpl(1, 6));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.SINGLE_POINT, actualAdjacency);
+    }
+
+    @Test
+    public void determineAdjacencyWith_singlePointCornerAdjacentBottomLeft_returnsCorrectValue()
+    {
+        rectangleA = new RectangleImpl(4, 3, new PointImpl(3, 3));
+        rectangleB = new RectangleImpl(1, 1, new PointImpl(2, 2));
+
+        Adjacency actualAdjacency = rectangleA.determineAdjacencyWith(rectangleB);
+
+        assertEquals(Adjacency.SINGLE_POINT, actualAdjacency);
     }
 }
